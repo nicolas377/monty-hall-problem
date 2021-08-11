@@ -1,0 +1,27 @@
+{
+  "name": "monty-hall-problem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc && node build/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas377/monty-hall-problem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas377/monty-hall-problem/issues"
+  },
+  "homepage": "https://github.com/nicolas377/monty-hall-problem#readme",
+  "devDependencies": {
+    "@types/node": "^16.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "^7.32.0",
+    "prettier": "^2.3.2"
+  }
+}
