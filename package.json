@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc && node build/main.js"
+    "run": "npx prettier --write . && node build/main.js"
   },
   "repository": {
     "type": "git",
