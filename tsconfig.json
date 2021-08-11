@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "target": "ESNext",
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "outFile": "main.js"
+  },
+  "include": ["src/**/*"],
+  "types": ["node"]
+}
