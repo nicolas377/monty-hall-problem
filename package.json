@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc && npx prettier --write .",
-    "run": "npx tsc && node main.js"
+    "start": "npx tsc && node main.js"
   },
   "repository": {
     "type": "git",
