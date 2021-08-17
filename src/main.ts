@@ -6,7 +6,16 @@ interface DoorInfo {
   hasPrize: boolean;
 }
 
-function getRandomDoorNumber(): DoorNumber {
+interface GameResults {
+  doorWithPrize: DoorNumber;
+  initialChoice: DoorNumber;
+  firstDoorOpened: DoorNumber;
+  switched: boolean;
+  secondChoice: DoorNumber;
+  won: boolean;
+}
+
+function randomDoorNumber(): DoorNumber {
   return Math.floor(Math.random() * 3) as DoorNumber
 }
 
@@ -21,7 +30,7 @@ class door {
     this.info.isOpen = true
   }
 
-  addPrize() {
+  setPrize() {
     this.info.hasPrize = true
   }
 }
@@ -47,44 +56,123 @@ class stage {
       isOpen: false,
       hasPrize: false
     })
-    
-    // put a prize behind a door
-    this[`door${getRandomDoorNumber()}`].addPrize()
+
+    // pick a random door to have a prize
+    this.getDoorFromNumber(randomDoorNumber()).setPrize()
   }
 
-  getDoors(): door[] {
-    var toReturn: door[] = []
-    toReturn.push(this.door0)
-    toReturn.push(this.door1)
-    toReturn.push(this.door2)
-    return toReturn
+  getDoorFromNumber(numberToGet: DoorNumber): door {
+    var Door: door = this[`door${numberToGet}`]
+
+    return Door
   }
 
-  openDoorWithoutPrize(): door {
-    var doors = this.getDoors()
+  getAllDoors(): door[] {
+    var numbers: DoorNumber[] = [0, 1, 2]
+    var doors: door[] = []
+    numbers.forEach((value) => {
+      doors.push(this.getDoorFromNumber(value))
+    })
 
-    // weed out the door with a prize
-    doors.forEach((element, index) => {
-      if (!element.info.hasPrize) {
-        doors = doors.splice(index, 1)
+    return doors
+  }
+
+  getClosedDoors(): door[] {
+    var doors: door[] = this.getAllDoors()
+    var closed: door[] = []
+
+    doors.forEach((value, number) => {
+      if (value.info.isOpen == false) {
+        closed.push(value)
       }
     })
 
-    // open a random door without a prize
-    const randomIndex: DoorNumber = Math.floor(Math.random()*doors.length) as DoorNumber
-    doors[randomIndex].open()
-
-    return doors[randomIndex]
+    return closed
   }
 
-  openDoor(doorNumber: DoorNumber): door {
-    this[`door${doorNumber}`].open()
-    return this[`door${doorNumber}`]
+  getDoorWithPrize(): door {
+    var toReturn: door
+    this.getAllDoors().forEach((value) => {
+      if (value.info.hasPrize) {
+        toReturn = value
+      }
+    })
+    return toReturn
+  }
+
+  getDoorsWithoutPrizes(): door[] {
+    var doors: door[] = []
+    this.getAllDoors().forEach((value) => {
+      if (!value.info.hasPrize) {
+        doors.push(value)
+      }
+    })
+    return doors
   }
 }
 
-class player {
-  constructor() {}
+/**
+ * Plays a game
+ * @param toSwitch {boolean} whether to stand on the initial choice or not
+ */
+function game(toSwitch: boolean): GameResults {
+  // start game
+  var results: GameResults = {
+    doorWithPrize: undefined,
+    initialChoice: undefined,
+    firstDoorOpened: undefined,
+    switched: undefined,
+    secondChoice: undefined,
+    won: undefined
+  }
+  var Stage = new stage()
+  results.doorWithPrize = Stage.getDoorWithPrize().info.number
+
+  console.log(`Stage set up! Door with prize is #${results.doorWithPrize}!`)
+
+  // pick a random door to start
+  var pickedDoorNumber = randomDoorNumber()
+  var pickedDoor = Stage.getDoorFromNumber(pickedDoorNumber)
+  results.initialChoice = pickedDoorNumber
+
+  console.log(`Player picked door #${pickedDoorNumber}!`)
+
+  // open a closed door
+  var doorsWithoutPrizes = Stage.getDoorsWithoutPrizes()
+  var doorToOpen = doorsWithoutPrizes[Math.floor(Math.random()*doorsWithoutPrizes.length)]
+  while (doorToOpen == pickedDoor) {
+    doorToOpen = doorsWithoutPrizes[Math.floor(Math.random()*doorsWithoutPrizes.length)]
+  }
+  doorToOpen.open()
+  results.firstDoorOpened = doorToOpen.info.number
+
+  console.log(`Host opened door #${doorToOpen.info.number}!`)
+
+  // switch or stand
+  if (toSwitch) {
+    Stage.getClosedDoors().forEach((value) => {
+      if (value.info.number !== pickedDoor.info.number) {
+        pickedDoor = value
+      }
+    })
+    results.secondChoice = pickedDoor.info.number
+    results.switched = true
+    console.log(`Switched pick to door #${pickedDoor.info.number}!`)
+  } else {
+    results.secondChoice = pickedDoor.info.number
+    results.switched = false
+    console.log(`Stood on door #${pickedDoor.info.number}!`)
+  }
+
+  if (pickedDoor == Stage.getDoorWithPrize()) {
+    results.won = true
+    console.log("Player won!")
+  } else {
+    results.won = false
+    console.log("Player lost!")
+  }
+
+  return results
 }
 
-var Stage = new stage()
+console.log(game(true))
