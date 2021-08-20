@@ -1,0 +1,18 @@
+{
+  "switched": {
+    "numberOfGames": 500000,
+    "initialChoices": { "door0": 166631, "door1": 167160, "door2": 166209 },
+    "firstDoorOpened": { "door0": 166842, "door1": 166917, "door2": 166241 },
+    "switched": true,
+    "secondChoice": { "door0": 0, "door1": 166241, "door2": 333759 },
+    "won": { "won": 250364, "lost": 249636 }
+  },
+  "stood": {
+    "numberOfGames": 500000,
+    "initialChoices": { "door0": 166673, "door1": 167082, "door2": 166245 },
+    "firstDoorOpened": { "door0": 166400, "door1": 166256, "door2": 167344 },
+    "switched": false,
+    "secondChoice": { "door0": 166673, "door1": 167082, "door2": 166245 },
+    "won": { "won": 166235, "lost": 333765 }
+  }
+}
